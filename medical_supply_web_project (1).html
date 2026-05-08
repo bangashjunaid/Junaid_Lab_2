@@ -1,0 +1,2483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medica — Medical Supply Chain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/[email protected]/iconfont/tabler-icons.min.css" rel="stylesheet">
+<style>
+:root {
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Surfaces */
+  --surface-app: #FAFAFA;
+  --surface-elevated: #FFFFFF;
+  --surface-subtle: #F5F5F5;
+  --surface-muted: #F0F0F0;
+  --surface-hover: #F7F7F7;
+
+  /* Text — neutral, near-black */
+  --text-primary: #0A0A0A;
+  --text-secondary: #525252;
+  --text-tertiary: #737373;
+  --text-quaternary: #A3A3A3;
+  --text-disabled: #D4D4D4;
+  --text-inverse: #FAFAFA;
+
+  /* Borders */
+  --border-subtle: #EAEAEA;
+  --border-default: #E5E5E5;
+  --border-strong: #D4D4D4;
+  --border-focus: #0A0A0A;
+
+  /* Brand — restrained teal-green */
+  --brand: #047857;
+  --brand-hover: #065F46;
+  --brand-active: #064E3B;
+  --brand-soft: #ECFDF5;
+  --brand-border: #A7F3D0;
+
+  /* Status */
+  --success-bg: #ECFDF5;
+  --success-fg: #065F46;
+  --success-border: #A7F3D0;
+
+  --warning-bg: #FFFBEB;
+  --warning-fg: #92400E;
+  --warning-border: #FDE68A;
+
+  --danger-bg: #FEF2F2;
+  --danger-fg: #991B1B;
+  --danger-border: #FECACA;
+
+  --info-bg: #EFF6FF;
+  --info-fg: #1E40AF;
+  --info-border: #BFDBFE;
+
+  --violet-bg: #F5F3FF;
+  --violet-fg: #5B21B6;
+  --violet-border: #DDD6FE;
+
+  /* Shape */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+
+  /* Shadows — subtle, layered */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 24px -8px rgba(0, 0, 0, 0.10), 0 4px 8px -4px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 24px 48px -12px rgba(0, 0, 0, 0.18);
+
+  /* Focus ring */
+  --ring: 0 0 0 3px rgba(4, 120, 87, 0.16);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--surface-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  letter-spacing: -0.005em;
+}
+
+button { font-family: inherit; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ==================================================
+   APP SHELL
+   ================================================== */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* TOPBAR */
+.topbar {
+  background: var(--surface-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.brand-mark {
+  width: 28px; height: 28px;
+  background: var(--brand);
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-sm);
+}
+.brand-mark svg { width: 16px; height: 16px; color: #fff; }
+.brand-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+}
+
+.topbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-default);
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 450;
+}
+.breadcrumb i { font-size: 14px; color: var(--text-quaternary); }
+.breadcrumb .current {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.spacer { flex: 1; }
+
+/* Top action buttons */
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.top-icon-btn {
+  width: 32px; height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.top-icon-btn:hover { background: var(--surface-subtle); color: var(--text-primary); }
+.top-icon-btn i { font-size: 17px; }
+
+.role-switcher {
+  display: flex;
+  gap: 0;
+  background: var(--surface-subtle);
+  border-radius: 8px;
+  padding: 3px;
+}
+.role-btn {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.12s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.005em;
+}
+.role-btn:hover { color: var(--text-primary); }
+.role-btn.active {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs), 0 0 0 1px var(--border-default);
+  font-weight: 550;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 99px;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+  color: var(--text-primary);
+}
+.user-pill:hover { background: var(--surface-subtle); }
+.user-avatar {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* LAYOUT */
+.layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 232px;
+  flex-shrink: 0;
+  background: var(--surface-elevated);
+  border-right: 1px solid var(--border-subtle);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: sticky;
+  top: 56px;
+  align-self: flex-start;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+
+.sidebar-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-quaternary);
+  padding: 16px 10px 6px;
+}
+.sidebar-section-label:first-child { padding-top: 4px; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+  font-weight: 450;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.12s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  letter-spacing: -0.005em;
+}
+.nav-item:hover {
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+}
+.nav-item.active {
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+  font-weight: 550;
+}
+.nav-item.active i {
+  color: var(--brand);
+}
+.nav-item i {
+  font-size: 16px;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+  transition: color 0.12s;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 12px 10px;
+  border-top: 1px solid var(--border-subtle);
+}
+.sidebar-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-weight: 450;
+}
+.status-pulse {
+  width: 6px; height: 6px;
+  background: #10B981;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+.status-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #10B981;
+  animation: pulse 2s ease-out infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  overflow: auto;
+  min-width: 0;
+  background: var(--surface-app);
+}
+
+.content-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 32px 48px;
+}
+
+.page { display: none; animation: fadeIn 0.25s ease; }
+.page.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* PAGE HEADER */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.page-header-text { flex: 1; min-width: 0; }
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.page-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 450;
+  line-height: 1.5;
+  max-width: 640px;
+}
+.page-header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+/* METRICS */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.metric {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  transition: border-color 0.15s;
+}
+.metric:hover { border-color: var(--border-default); }
+
+.metric-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: -0.005em;
+}
+.metric-label-text { display: flex; align-items: center; gap: 7px; }
+.metric-label i {
+  font-size: 15px;
+  color: var(--text-tertiary);
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  font-feature-settings: 'tnum';
+}
+.metric-sub {
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  margin-top: 6px;
+  font-weight: 450;
+  letter-spacing: -0.005em;
+}
+.metric-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--success-fg);
+  background: var(--success-bg);
+  padding: 2px 7px;
+  border-radius: 99px;
+  margin-left: 8px;
+  letter-spacing: 0;
+}
+
+/* CARD */
+.card {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 16px;
+}
+.card-header.no-border { border-bottom: none; padding-bottom: 4px; }
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+.card-subtitle {
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  font-weight: 450;
+}
+.card-body { padding: 16px 20px 20px; }
+.card-body.no-pad { padding: 0; }
+
+/* BUTTONS */
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 13px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.12s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  box-shadow: var(--shadow-xs);
+  height: 32px;
+}
+.btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+.btn:active { background: var(--surface-subtle); }
+.btn i { font-size: 15px; color: var(--text-secondary); }
+
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.btn-primary:hover {
+  background: var(--brand-hover);
+  border-color: var(--brand-hover);
+}
+.btn-primary:active { background: var(--brand-active); }
+.btn-primary i { color: #fff; }
+
+.btn-danger {
+  color: var(--danger-fg);
+}
+.btn-danger:hover {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger-fg);
+}
+.btn-danger i { color: var(--danger-fg); }
+
+.btn-sm {
+  font-size: 12.5px;
+  padding: 5px 10px;
+  height: 28px;
+  gap: 5px;
+}
+.btn-sm i { font-size: 14px; }
+
+.btn-ghost {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-secondary);
+}
+.btn-ghost:hover {
+  background: var(--surface-subtle);
+  border-color: transparent;
+  color: var(--text-primary);
+}
+
+.btn-icon {
+  width: 32px;
+  padding: 0;
+  justify-content: center;
+}
+.btn-icon.btn-sm { width: 28px; }
+
+/* TABLES */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface-app);
+  letter-spacing: -0.005em;
+}
+th:first-child { padding-left: 20px; }
+th:last-child { padding-right: 20px; text-align: right; }
+
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+  color: var(--text-primary);
+  font-weight: 450;
+}
+td:first-child { padding-left: 20px; }
+td:last-child { padding-right: 20px; }
+tbody tr {
+  transition: background 0.1s;
+}
+tbody tr:hover { background: var(--surface-app); }
+tbody tr:last-child td { border-bottom: none; }
+
+td strong { font-weight: 550; color: var(--text-primary); }
+
+/* BADGES */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 550;
+  padding: 2px 8px;
+  border-radius: 99px;
+  letter-spacing: -0.005em;
+  text-transform: capitalize;
+  border: 1px solid;
+  line-height: 1.5;
+}
+.badge::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.badge-valid, .badge-active {
+  background: var(--success-bg);
+  color: var(--success-fg);
+  border-color: var(--success-border);
+}
+.badge-revoked {
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+  border-color: var(--danger-border);
+}
+.badge-sold {
+  background: var(--violet-bg);
+  color: var(--violet-fg);
+  border-color: var(--violet-border);
+}
+.badge-expired {
+  background: var(--warning-bg);
+  color: var(--warning-fg);
+  border-color: var(--warning-border);
+}
+.badge-gov {
+  background: var(--info-bg);
+  color: var(--info-fg);
+  border-color: var(--info-border);
+}
+.badge-mfr {
+  background: var(--warning-bg);
+  color: var(--warning-fg);
+  border-color: var(--warning-border);
+}
+.badge-pha {
+  background: var(--violet-bg);
+  color: var(--violet-fg);
+  border-color: var(--violet-border);
+}
+
+/* FORMS */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: -0.005em;
+}
+.form-hint {
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+input[type="text"], input[type="date"], select, textarea {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  transition: all 0.12s;
+  font-feature-settings: 'cv11';
+  height: 36px;
+  letter-spacing: -0.005em;
+}
+textarea { height: auto; min-height: 80px; resize: vertical; padding: 9px 12px; }
+
+input[type="text"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: var(--ring);
+}
+input[type="text"]::placeholder, textarea::placeholder { color: var(--text-quaternary); }
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* TIMELINE / ACTIVITY FEED */
+.timeline { list-style: none; }
+.timeline li {
+  display: flex;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13.5px;
+  align-items: flex-start;
+}
+.timeline li:last-child { border-bottom: none; }
+.timeline-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface-subtle);
+  color: var(--text-tertiary);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  margin-top: 1px;
+}
+.timeline-text {
+  flex: 1;
+  color: var(--text-primary);
+  line-height: 1.45;
+  font-weight: 450;
+}
+.timeline-actor {
+  display: block;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  font-weight: 400;
+}
+.timeline-date {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-feature-settings: 'tnum';
+  white-space: nowrap;
+  margin-top: 1px;
+  font-weight: 450;
+}
+
+/* WORKFLOW STRIP */
+.workflow-strip {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.workflow-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.workflow-step .icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  background: var(--surface-subtle);
+  color: var(--text-tertiary);
+  border: 1px solid var(--border-subtle);
+}
+.workflow-step.done .icon {
+  background: var(--brand-soft);
+  color: var(--brand);
+  border-color: var(--brand-border);
+}
+.workflow-step.active .icon {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px var(--brand-soft);
+}
+.workflow-step .label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  letter-spacing: -0.005em;
+}
+.workflow-step.active .label, .workflow-step.done .label {
+  color: var(--text-primary);
+  font-weight: 550;
+}
+.workflow-arrow {
+  flex: 1;
+  min-width: 32px;
+  height: 1px;
+  background: var(--border-default);
+  margin: 0 14px;
+}
+.workflow-step.done + .workflow-arrow {
+  background: var(--brand-border);
+}
+
+/* INFO BANNER */
+.banner {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.banner i {
+  font-size: 16px;
+  color: var(--brand);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.banner strong { color: var(--text-primary); font-weight: 550; }
+
+/* VERIFY PAGE — public hero */
+.verify-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 32px 0 60px;
+}
+.verify-hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.verify-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--brand);
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px;
+  font-size: 26px;
+  color: #fff;
+  box-shadow: var(--shadow-md), 0 0 0 6px var(--brand-soft);
+}
+.verify-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 10px;
+}
+.verify-title {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+.verify-sub {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  max-width: 460px;
+  margin: 0 auto;
+  line-height: 1.55;
+  font-weight: 450;
+}
+.verify-input-row {
+  display: flex;
+  gap: 8px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 5px;
+  transition: all 0.15s;
+  box-shadow: var(--shadow-xs);
+}
+.verify-input-row:focus-within {
+  border-color: var(--brand);
+  box-shadow: var(--ring);
+}
+.verify-input-row input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 8px 14px;
+  color: var(--text-primary);
+  height: auto;
+}
+.verify-input-row input:focus { outline: none; box-shadow: none; }
+.verify-input-row .btn-primary { padding: 8px 16px; height: auto; }
+
+.verify-hint {
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  margin-top: 12px;
+  text-align: center;
+}
+.verify-hint .sample {
+  font-family: var(--font-mono);
+  cursor: pointer;
+  color: var(--brand);
+  font-weight: 500;
+  transition: color 0.12s;
+}
+.verify-hint .sample:hover { color: var(--brand-hover); }
+
+.verify-result {
+  margin-top: 28px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  animation: fadeIn 0.25s ease;
+}
+.verify-result-header {
+  background: var(--brand-soft);
+  border-bottom: 1px solid var(--brand-border);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.verify-result-header .check {
+  font-size: 20px;
+  width: 36px; height: 36px;
+  background: var(--brand);
+  color: #fff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.verify-result-header .title {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  letter-spacing: -0.01em;
+}
+.verify-result-header .uuid {
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+}
+
+.verify-result-body { padding: 20px; }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.info-item .label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+.info-item .val {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.history-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.005em;
+}
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  padding: 9px 12px;
+  background: var(--surface-app);
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  font-weight: 450;
+}
+.history-item .idx {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  min-width: 18px;
+}
+.history-item .arrow {
+  color: var(--text-quaternary);
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+}
+.history-item .ts {
+  margin-left: auto;
+  color: var(--text-tertiary);
+  font-size: 11.5px;
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum';
+}
+.history-item .target { font-weight: 550; }
+
+.not-found {
+  margin-top: 28px;
+  border: 1px solid var(--danger-border);
+  background: var(--danger-bg);
+  border-radius: var(--radius-xl);
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  color: var(--danger-fg);
+}
+.not-found i {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.not-found-text strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  padding: 48px 20px !important;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  font-weight: 450;
+}
+
+/* MODALS */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.15s ease;
+  padding: 20px;
+}
+.modal {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  width: 460px;
+  max-width: 100%;
+  box-shadow: var(--shadow-xl);
+  animation: modalIn 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 20px 16px;
+  gap: 16px;
+}
+.modal-title-block { flex: 1; }
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.modal-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 450;
+}
+.modal-body { padding: 0 20px; }
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 16px 20px 20px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+  pointer-events: none;
+  letter-spacing: -0.005em;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast i { color: #34D399; font-size: 15px; }
+.toast.error i { color: #F87171; }
+
+.uuid-mono {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  font-feature-settings: 'tnum';
+  letter-spacing: -0.01em;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 99px;
+  border: 2px solid var(--surface-app);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-quaternary); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .topbar { padding: 0 16px; gap: 12px; height: 52px; }
+  .breadcrumb, .topbar-divider, .user-pill { display: none; }
+  .role-btn { padding: 5px 9px; font-size: 12px; }
+  .sidebar { width: 60px; padding: 12px 8px; top: 52px; height: calc(100vh - 52px); }
+  .sidebar-section-label, .nav-item-label, .sidebar-footer { display: none; }
+  .nav-item { justify-content: center; padding: 9px; }
+  .content-inner { padding: 20px 16px 40px; }
+  .page-header { flex-direction: column; align-items: stretch; gap: 12px; }
+  .page-title { font-size: 20px; }
+  .metrics { grid-template-columns: 1fr; gap: 10px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .verify-title { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<h2 class="sr-only">Medica — medical supply chain workflow</h2>
+
+<div class="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 12l2 2 4-4"/>
+          <path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/>
+        </svg>
+      </div>
+      <div class="brand-name">Medica</div>
+    </div>
+
+    <div class="topbar-divider"></div>
+
+    <div class="breadcrumb">
+      <span id="bc-section">Government</span>
+      <i class="ti ti-chevron-right"></i>
+      <span class="current" id="bc-page">Dashboard</span>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="role-switcher" role="tablist" aria-label="Role">
+      <button class="role-btn active" data-role="gov" onclick="switchRole('gov', this)">Government</button>
+      <button class="role-btn" data-role="mfr" onclick="switchRole('mfr', this)">Manufacturer</button>
+      <button class="role-btn" data-role="pha" onclick="switchRole('pha', this)">Pharmacy</button>
+      <button class="role-btn" data-role="pub" onclick="switchRole('pub', this)">Public</button>
+    </div>
+
+    <div class="top-actions">
+      <button class="top-icon-btn" aria-label="Search"><i class="ti ti-search"></i></button>
+      <button class="top-icon-btn" aria-label="Notifications"><i class="ti ti-bell"></i></button>
+    </div>
+
+    <div class="user-pill">
+      <div class="user-avatar" id="user-avatar">GA</div>
+      <span id="user-name">Gov Admin</span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar" aria-label="Primary"></nav>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <div class="content-inner">
+        <!-- ====================== GOV PAGES ====================== -->
+        <div class="page active" id="page-gov-dashboard">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Dashboard</h1>
+              <p class="page-sub">System overview for the regulatory authority. Monitor drug registrations, manufacturer licenses, and unit-level traceability.</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn" onclick="showModal('modal-register-org')"><i class="ti ti-building"></i> Register</button>
+              <button class="btn btn-primary" onclick="showModal('modal-add-drugtype')"><i class="ti ti-plus"></i> New drug type</button>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label">
+                <span class="metric-label-text"><i class="ti ti-pill"></i> Drug types</span>
+              </div>
+              <div class="metric-value" id="kpi-drugtypes">3</div>
+              <div class="metric-sub">Registered & approved</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">
+                <span class="metric-label-text"><i class="ti ti-file-certificate"></i> Active licenses</span>
+              </div>
+              <div class="metric-value" id="kpi-licenses">2<span class="metric-trend"><i class="ti ti-arrow-up-right" style="font-size:10px"></i> stable</span></div>
+              <div class="metric-sub">Manufacturer authorizations</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">
+                <span class="metric-label-text"><i class="ti ti-box"></i> Units tracked</span>
+              </div>
+              <div class="metric-value" id="kpi-units">4</div>
+              <div class="metric-sub">Across the entire chain</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Recent activity</div>
+                <div class="card-subtitle">Latest events recorded on the ledger</div>
+              </div>
+              <button class="btn btn-sm btn-ghost" onclick="showPage('gov-audit')">View all <i class="ti ti-arrow-right"></i></button>
+            </div>
+            <ul class="timeline" id="audit-feed"></ul>
+          </div>
+        </div>
+
+        <div class="page" id="page-gov-drugtypes">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Drug types</h1>
+              <p class="page-sub">All pharmaceuticals registered with the regulatory authority. New types must be approved before licenses can be issued.</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn btn-primary" onclick="showModal('modal-add-drugtype')"><i class="ti ti-plus"></i> Register drug type</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">All drug types</div>
+            </div>
+            <table>
+              <thead><tr><th>Name</th><th>Code</th><th>Description</th><th>Created</th><th></th></tr></thead>
+              <tbody id="tbl-drugtypes"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="page" id="page-gov-licenses">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Licenses</h1>
+              <p class="page-sub">Issue, prolong, or revoke manufacturer licenses. Each license authorizes one drug type for one manufacturer.</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn btn-primary" onclick="showModal('modal-issue-license')"><i class="ti ti-plus"></i> Issue license</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">All licenses</div>
+            </div>
+            <table>
+              <thead><tr><th>ID</th><th>Drug type</th><th>Manufacturer</th><th>Status</th><th>Expires</th><th></th></tr></thead>
+              <tbody id="tbl-licenses-gov"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="page" id="page-gov-participants">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Participants</h1>
+              <p class="page-sub">Registered organizations that interact with the supply chain — manufacturers and pharmacies.</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn btn-primary" onclick="showModal('modal-register-org')"><i class="ti ti-plus"></i> Register</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">All participants</div>
+            </div>
+            <table>
+              <thead><tr><th>Name</th><th>Role</th><th>ID</th><th>Registered</th></tr></thead>
+              <tbody id="tbl-participants"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="page" id="page-gov-audit">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Audit log</h1>
+              <p class="page-sub">Every event recorded on the supply-chain ledger. Read only — chronological by default.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">All events</div>
+            </div>
+            <table>
+              <thead><tr><th>Timestamp</th><th>Event</th><th>Actor</th></tr></thead>
+              <tbody id="tbl-audit"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ====================== MFR PAGES ====================== -->
+        <div class="page" id="page-mfr-dashboard">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Dashboard</h1>
+              <p class="page-sub">PharmaCorp · Manufacturer console for creating and dispatching medicine units.</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn" onclick="showModal('modal-transfer-pha')"><i class="ti ti-truck-delivery"></i> Dispatch</button>
+              <button class="btn btn-primary" onclick="showModal('modal-create-unit')"><i class="ti ti-plus"></i> Create unit</button>
+            </div>
+          </div>
+
+          <div class="banner">
+            <i class="ti ti-info-circle"></i>
+            <div><strong>Heads up.</strong> You can only create units for drug types covered by a valid license. Revoked or expired licenses block production immediately.</div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label"><span class="metric-label-text"><i class="ti ti-file-certificate"></i> My licenses</span></div>
+              <div class="metric-value" id="kpi-mfr-lic">2</div>
+              <div class="metric-sub">Currently valid</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span class="metric-label-text"><i class="ti ti-package"></i> Units created</span></div>
+              <div class="metric-value" id="kpi-mfr-units">4</div>
+              <div class="metric-sub">All time</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span class="metric-label-text"><i class="ti ti-truck-loading"></i> Pending transfers</span></div>
+              <div class="metric-value">1</div>
+              <div class="metric-sub">Awaiting dispatch</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Supply chain workflow</div>
+                <div class="card-subtitle">Your position in the chain</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="workflow-strip" style="margin:0;border:none;padding:0;">
+                <div class="workflow-step done">
+                  <div class="icon"><i class="ti ti-file-certificate"></i></div>
+                  <div class="label">License</div>
+                </div>
+                <div class="workflow-arrow"></div>
+                <div class="workflow-step active">
+                  <div class="icon"><i class="ti ti-flask-2"></i></div>
+                  <div class="label">Manufacture</div>
+                </div>
+                <div class="workflow-arrow"></div>
+                <div class="workflow-step">
+                  <div class="icon"><i class="ti ti-truck-delivery"></i></div>
+                  <div class="label">Dispatch</div>
+                </div>
+                <div class="workflow-arrow"></div>
+                <div class="workflow-step">
+                  <div class="icon"><i class="ti ti-building-store"></i></div>
+                  <div class="label">Pharmacy</div>
+                </div>
+                <div class="workflow-arrow"></div>
+                <div class="workflow-step">
+                  <div class="icon"><i class="ti ti-user"></i></div>
+                  <div class="label">Citizen</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page" id="page-mfr-licenses">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">My licenses</h1>
+              <p class="page-sub">Licenses granted to PharmaCorp by the regulatory authority.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">License portfolio</div>
+            </div>
+            <table>
+              <thead><tr><th>Drug type</th><th>Status</th><th>Expires</th><th>Action</th></tr></thead>
+              <tbody id="tbl-mfr-licenses"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="page" id="page-mfr-create">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Create medicine unit</h1>
+              <p class="page-sub">Register a new physical unit under one of your valid licenses. Each unit gets a unique UUID for end-to-end traceability.</p>
+            </div>
+          </div>
+          <div class="card" style="max-width:560px;">
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Drug type</label>
+                <select id="create-drug-select"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Expiration date</label>
+                <input type="date" id="create-exp-date">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Unit UUID <span class="form-hint">— auto-generated</span></label>
+                <input type="text" id="create-uuid-preview" readonly style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);background:var(--surface-subtle);">
+              </div>
+              <button class="btn btn-primary" onclick="doCreateUnit()"><i class="ti ti-flask-2"></i> Create unit</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="page" id="page-mfr-units">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">My units</h1>
+              <p class="page-sub">Medicine units currently owned by PharmaCorp — ready for dispatch.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Inventory</div>
+            </div>
+            <table>
+              <thead><tr><th>UUID</th><th>Drug type</th><th>Expiration</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="tbl-mfr-units"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ====================== PHA PAGES ====================== -->
+        <div class="page" id="page-pha-dashboard">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Dashboard</h1>
+              <p class="page-sub">City Pharmacy · Receive units from manufacturers and dispense them to citizens.</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn btn-primary" onclick="showModal('modal-transfer-citizen')"><i class="ti ti-pill"></i> Dispense to citizen</button>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label"><span class="metric-label-text"><i class="ti ti-box"></i> Units in stock</span></div>
+              <div class="metric-value" id="kpi-pha-units">0</div>
+              <div class="metric-sub">Ready to dispense</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span class="metric-label-text"><i class="ti ti-user-check"></i> Dispensed</span></div>
+              <div class="metric-value" id="kpi-pha-sold">0</div>
+              <div class="metric-sub">All time</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span class="metric-label-text"><i class="ti ti-calendar-off"></i> Expired</span></div>
+              <div class="metric-value">0</div>
+              <div class="metric-sub">Removed from stock</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page" id="page-pha-units">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h1 class="page-title">Units I own</h1>
+              <p class="page-sub">Medicine units received from authorized manufacturers.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Stock</div>
+            </div>
+            <table>
+              <thead><tr><th>UUID</th><th>Drug type</th><th>Expiration</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="tbl-pha-units"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ====================== PUBLIC PAGE ====================== -->
+        <div class="page" id="page-pub-verify">
+          <div class="verify-page">
+            <div class="verify-hero">
+              <div class="verify-icon">
+                <i class="ti ti-shield-check"></i>
+              </div>
+              <div class="verify-eyebrow">Public verification</div>
+              <h1 class="verify-title">Verify a medicine unit</h1>
+              <p class="verify-sub">Enter the unit's UUID — printed on the package — to check authenticity, current ownership, and the full supply-chain history.</p>
+            </div>
+
+            <div class="verify-input-row">
+              <input type="text" id="verify-input" placeholder="550e8400-e29b-41d4-a716-446655440000">
+              <button class="btn btn-primary" onclick="doVerify()"><i class="ti ti-search"></i> Verify</button>
+            </div>
+            <div class="verify-hint">
+              Don't have a code? <span class="sample" onclick="prefillVerify()">Try a sample UUID</span>
+            </div>
+            <div id="verify-result-area"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== MODALS ============== -->
+<div id="modal-edit-drugtype" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-title">Edit drug type</div>
+        <div class="modal-sub">Update name or description (logged)</div>
+      </div>
+      <button class="btn btn-icon btn-sm btn-ghost" onclick="closeModal('modal-edit-drugtype')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edt-id">
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input type="text" id="edt-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Code <span class="form-hint">— read only</span></label>
+        <input type="text" id="edt-code" readonly style="background:var(--surface-subtle);color:var(--text-secondary);">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea id="edt-desc"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-edit-drugtype')">Cancel</button>
+      <button class="btn btn-primary" onclick="doEditDrugType()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-add-drugtype" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-title">Register drug type</div>
+        <div class="modal-sub">Add a new pharmaceutical to the national catalog</div>
+      </div>
+      <button class="btn btn-icon btn-sm btn-ghost" onclick="closeModal('modal-add-drugtype')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input type="text" id="dt-name" placeholder="e.g. Paracetamol 500mg">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Code</label>
+        <input type="text" id="dt-code" placeholder="e.g. PARA-500">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description <span class="form-hint">— optional</span></label>
+        <textarea id="dt-desc" placeholder="Brief description, indications, notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-add-drugtype')">Cancel</button>
+      <button class="btn btn-primary" onclick="doAddDrugType()">Register</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-issue-license" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-title">Issue license</div>
+        <div class="modal-sub">Authorize a manufacturer to produce a drug type</div>
+      </div>
+      <button class="btn btn-icon btn-sm btn-ghost" onclick="closeModal('modal-issue-license')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Drug type</label>
+        <select id="lic-drug"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Manufacturer</label>
+        <select id="lic-mfr"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Expires on</label>
+        <input type="date" id="lic-exp">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-issue-license')">Cancel</button>
+      <button class="btn btn-primary" onclick="doIssueLicense()">Issue license</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-register-org" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-title">Register participant</div>
+        <div class="modal-sub">Onboard a manufacturer or pharmacy onto the network</div>
+      </div>
+      <button class="btn btn-icon btn-sm btn-ghost" onclick="closeModal('modal-register-org')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Organization name</label>
+        <input type="text" id="org-name" placeholder="e.g. MedPharm Ltd.">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select id="org-role">
+          <option value="Manufacturer">Manufacturer</option>
+          <option value="Pharmacy">Pharmacy</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-register-org')">Cancel</button>
+      <button class="btn btn-primary" onclick="doRegisterOrg()">Register</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-create-unit" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-title">Create medicine unit</div>
+        <div class="modal-sub">Register a new traceable unit</div>
+      </div>
+      <button class="btn btn-icon btn-sm btn-ghost" onclick="closeModal('modal-create-unit')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Drug type</label>
+        <select id="modal-drug-select"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Expiration date</label>
+        <input type="date" id="modal-exp-date">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-create-unit')">Cancel</button>
+      <button class="btn btn-primary" onclick="doCreateUnitModal()">Create unit</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-transfer-pha" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-title">Transfer to pharmacy</div>
+        <div class="modal-sub">Hand off a unit to an authorized pharmacy</div>
+      </div>
+      <button class="btn btn-icon btn-sm btn-ghost" onclick="closeModal('modal-transfer-pha')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Unit</label>
+        <select id="xfer-unit"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pharmacy</label>
+        <select id="xfer-pha"></select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-transfer-pha')">Cancel</button>
+      <button class="btn btn-primary" onclick="doTransferPharmacy()">Transfer</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-transfer-citizen" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-title">Dispense to citizen</div>
+        <div class="modal-sub">Final step — transfer ownership to the patient</div>
+      </div>
+      <button class="btn btn-icon btn-sm btn-ghost" onclick="closeModal('modal-transfer-citizen')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Unit</label>
+        <select id="cit-unit"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Citizen ID / Name</label>
+        <input type="text" id="cit-id" placeholder="e.g. Ahmed Khan — ID 12345">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-transfer-citizen')">Cancel</button>
+      <button class="btn btn-primary" onclick="doTransferCitizen()">Dispense</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-prolong" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-title">Prolong license</div>
+        <div class="modal-sub">Extend the validity of an active license</div>
+      </div>
+      <button class="btn btn-icon btn-sm btn-ghost" onclick="closeModal('modal-prolong')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">New expiry date</label>
+        <input type="date" id="prolong-date">
+      </div>
+      <input type="hidden" id="prolong-lic-id">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-prolong')">Cancel</button>
+      <button class="btn btn-primary" onclick="doProlongLicense()">Prolong</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"><i class="ti ti-circle-check-filled"></i><span id="toast-msg"></span></div>
+
+<script>
+// =====================================================
+// STATE
+// =====================================================
+let state = {
+  role: 'gov',
+  drugTypes: [
+    { id: 'dt-1', name: 'Paracetamol 500mg', code: 'PARA-500', description: 'Common analgesic', createdAt: '2026-01-10', createdBy: 'Gov Admin' },
+    { id: 'dt-2', name: 'Amoxicillin 250mg', code: 'AMOX-250', description: 'Broad-spectrum antibiotic', createdAt: '2026-02-05', createdBy: 'Gov Admin' },
+    { id: 'dt-3', name: 'Metformin 500mg', code: 'MET-500', description: 'Diabetes management', createdAt: '2026-03-12', createdBy: 'Gov Admin' },
+  ],
+  licenses: [
+    { id: 'L-001', drugTypeId: 'dt-1', manufacturerId: 'p-1', status: 'valid', issuedAt: '2026-01-15', expiresAt: '2026-12-31', issuedBy: 'Gov Admin' },
+    { id: 'L-002', drugTypeId: 'dt-2', manufacturerId: 'p-1', status: 'valid', issuedAt: '2026-02-10', expiresAt: '2026-09-30', issuedBy: 'Gov Admin' },
+    { id: 'L-003', drugTypeId: 'dt-3', manufacturerId: 'p-1', status: 'revoked', issuedAt: '2026-01-20', expiresAt: '2026-06-30', issuedBy: 'Gov Admin' },
+  ],
+  participants: [
+    { id: 'p-1', name: 'PharmaCorp', role: 'Manufacturer', createdAt: '2026-01-05' },
+    { id: 'p-2', name: 'City Pharmacy', role: 'Pharmacy', createdAt: '2026-01-08' },
+    { id: 'p-3', name: 'HealthPlus Pharmacy', role: 'Pharmacy', createdAt: '2026-02-01' },
+  ],
+  units: [
+    { id: '550e8400-e29b-41d4-a716-446655440000', drugTypeId: 'dt-1', manufacturerId: 'p-1', licenseId: 'L-001', currentOwner: 'p-2', status: 'active', expirationDate: '2026-08-01', createdAt: '2026-01-15', transferHistory: [
+      { from: 'System', to: 'PharmaCorp', timestamp: '2026-01-15T09:00:00Z' },
+      { from: 'PharmaCorp', to: 'City Pharmacy', timestamp: '2026-02-20T11:30:00Z' }
+    ]},
+    { id: 'a3f1c2d4-1234-4b5e-9876-abcdef123456', drugTypeId: 'dt-2', manufacturerId: 'p-1', licenseId: 'L-002', currentOwner: 'p-1', status: 'active', expirationDate: '2026-10-15', createdAt: '2026-03-01', transferHistory: [
+      { from: 'System', to: 'PharmaCorp', timestamp: '2026-03-01T08:00:00Z' }
+    ]},
+    { id: 'b7e9d0f2-5678-4c6f-abcd-112233445566', drugTypeId: 'dt-1', manufacturerId: 'p-1', licenseId: 'L-001', currentOwner: 'p-1', status: 'active', expirationDate: '2026-11-30', createdAt: '2026-03-15', transferHistory: [
+      { from: 'System', to: 'PharmaCorp', timestamp: '2026-03-15T10:00:00Z' }
+    ]},
+    { id: 'c8d1e3f5-9abc-4def-0123-aabbccddeeff', drugTypeId: 'dt-2', manufacturerId: 'p-1', licenseId: 'L-002', currentOwner: 'Citizen-12345', status: 'sold', expirationDate: '2026-07-20', createdAt: '2026-02-10', transferHistory: [
+      { from: 'System', to: 'PharmaCorp', timestamp: '2026-02-10T07:00:00Z' },
+      { from: 'PharmaCorp', to: 'City Pharmacy', timestamp: '2026-02-28T14:00:00Z' },
+      { from: 'City Pharmacy', to: 'Citizen-12345', timestamp: '2026-03-10T16:00:00Z' }
+    ]},
+  ],
+  auditLog: [
+    { ts: '2026-03-10 16:00', event: 'Unit c8d1e3f5 transferred to Citizen-12345', actor: 'City Pharmacy' },
+    { ts: '2026-03-01 08:00', event: 'Unit a3f1c2d4 created (Amoxicillin 250mg)', actor: 'PharmaCorp' },
+    { ts: '2026-02-28 14:00', event: 'Unit c8d1e3f5 transferred to City Pharmacy', actor: 'PharmaCorp' },
+    { ts: '2026-02-20 11:30', event: 'Unit 550e8400 transferred to City Pharmacy', actor: 'PharmaCorp' },
+    { ts: '2026-02-10 07:00', event: 'Unit c8d1e3f5 created (Amoxicillin 250mg)', actor: 'PharmaCorp' },
+    { ts: '2026-01-20 09:00', event: 'License L-003 issued (Metformin 500mg)', actor: 'Gov Admin' },
+    { ts: '2026-01-20 10:00', event: 'License L-003 revoked', actor: 'Gov Admin' },
+    { ts: '2026-01-15 09:00', event: 'Unit 550e8400 created (Paracetamol 500mg)', actor: 'PharmaCorp' },
+    { ts: '2026-01-15 08:00', event: 'License L-001 issued (Paracetamol 500mg)', actor: 'Gov Admin' },
+  ],
+};
+
+const navs = {
+  gov: {
+    section: 'Government', user: 'Gov Admin', avatar: 'GA',
+    groups: [
+      { label: 'Overview', items: [
+        { id: 'gov-dashboard', label: 'Dashboard', icon: 'ti-layout-dashboard' },
+      ]},
+      { label: 'Catalog', items: [
+        { id: 'gov-drugtypes', label: 'Drug types', icon: 'ti-pill' },
+        { id: 'gov-licenses', label: 'Licenses', icon: 'ti-file-certificate' },
+        { id: 'gov-participants', label: 'Participants', icon: 'ti-building' },
+      ]},
+      { label: 'Compliance', items: [
+        { id: 'gov-audit', label: 'Audit log', icon: 'ti-list-details' },
+      ]},
+    ],
+  },
+  mfr: {
+    section: 'Manufacturer', user: 'PharmaCorp', avatar: 'PC',
+    groups: [
+      { label: 'Overview', items: [
+        { id: 'mfr-dashboard', label: 'Dashboard', icon: 'ti-layout-dashboard' },
+      ]},
+      { label: 'Production', items: [
+        { id: 'mfr-licenses', label: 'My licenses', icon: 'ti-file-certificate' },
+        { id: 'mfr-create', label: 'Create unit', icon: 'ti-flask-2' },
+        { id: 'mfr-units', label: 'My units', icon: 'ti-box' },
+      ]},
+    ],
+  },
+  pha: {
+    section: 'Pharmacy', user: 'City Pharmacy', avatar: 'CP',
+    groups: [
+      { label: 'Overview', items: [
+        { id: 'pha-dashboard', label: 'Dashboard', icon: 'ti-layout-dashboard' },
+      ]},
+      { label: 'Stock', items: [
+        { id: 'pha-units', label: 'Units I own', icon: 'ti-box' },
+      ]},
+    ],
+  },
+  pub: {
+    section: 'Public', user: 'Anonymous', avatar: 'A',
+    groups: [
+      { label: 'Verification', items: [
+        { id: 'pub-verify', label: 'Verify medicine', icon: 'ti-shield-check' },
+      ]},
+    ],
+  },
+};
+
+let activePage = 'gov-dashboard';
+
+// =====================================================
+// CORE
+// =====================================================
+function switchRole(role, btnEl) {
+  state.role = role;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  const meta = navs[role];
+  document.getElementById('user-name').textContent = meta.user;
+  document.getElementById('user-avatar').textContent = meta.avatar;
+  renderSidebar();
+  const firstPage = meta.groups[0].items[0].id;
+  showPage(firstPage);
+}
+
+function renderSidebar() {
+  const sb = document.getElementById('sidebar');
+  const meta = navs[state.role];
+  let html = '';
+  meta.groups.forEach(g => {
+    html += `<div class="sidebar-section-label">${g.label}</div>`;
+    g.items.forEach(n => {
+      html += `
+        <button class="nav-item ${activePage === n.id ? 'active' : ''}" onclick="showPage('${n.id}')">
+          <i class="ti ${n.icon}" aria-hidden="true"></i>
+          <span class="nav-item-label">${n.label}</span>
+        </button>`;
+    });
+  });
+  html += `
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <span class="status-pulse"></span>
+        Ledger synced · live
+      </div>
+    </div>`;
+  sb.innerHTML = html;
+}
+
+function showPage(id) {
+  activePage = id;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + id);
+  if (el) el.classList.add('active');
+  const meta = navs[state.role];
+  document.getElementById('bc-section').textContent = meta.section;
+  let label = id;
+  meta.groups.forEach(g => g.items.forEach(it => { if (it.id === id) label = it.label; }));
+  document.getElementById('bc-page').textContent = label;
+  renderSidebar();
+  renderPage(id);
+  document.querySelector('.content').scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderPage(id) {
+  const map = {
+    'gov-dashboard': renderGovDashboard,
+    'gov-drugtypes': renderDrugTypes,
+    'gov-licenses': renderLicensesGov,
+    'gov-participants': renderParticipants,
+    'gov-audit': renderAudit,
+    'mfr-dashboard': renderMfrDashboard,
+    'mfr-licenses': renderMfrLicenses,
+    'mfr-create': renderMfrCreate,
+    'mfr-units': renderMfrUnits,
+    'pha-dashboard': renderPhaDashboard,
+    'pha-units': renderPhaUnits,
+  };
+  if (map[id]) map[id]();
+}
+
+function getParticipant(id) { return state.participants.find(p => p.id === id) || { name: id }; }
+function getDrugType(id) { return state.drugTypes.find(d => d.id === id) || { name: id }; }
+function shortId(uuid) { return uuid.substring(0, 8) + '…'; }
+
+// =====================================================
+// RENDERERS
+// =====================================================
+function renderGovDashboard() {
+  const valid = state.licenses.filter(l => l.status === 'valid').length;
+  document.getElementById('kpi-drugtypes').textContent = state.drugTypes.length;
+  const licEl = document.getElementById('kpi-licenses');
+  // preserve trend pill
+  licEl.firstChild.textContent = valid;
+  document.getElementById('kpi-units').textContent = state.units.length;
+  const feed = document.getElementById('audit-feed');
+  feed.innerHTML = state.auditLog.slice(0, 6).map(a => `
+    <li>
+      <span class="timeline-icon"><i class="ti ti-point-filled" style="font-size:14px"></i></span>
+      <span class="timeline-text">${a.event}<span class="timeline-actor">by ${a.actor}</span></span>
+      <span class="timeline-date">${a.ts}</span>
+    </li>
+  `).join('');
+}
+
+function renderDrugTypes() {
+  document.getElementById('tbl-drugtypes').innerHTML = state.drugTypes.map(d => `
+    <tr>
+      <td><strong>${d.name}</strong></td>
+      <td><span class="uuid-mono">${d.code}</span></td>
+      <td style="color:var(--text-secondary);">${d.description || '—'}</td>
+      <td style="color:var(--text-tertiary);font-size:13px;font-feature-settings:'tnum';">${d.createdAt}</td>
+      <td style="text-align:right;">
+        <div style="display:inline-flex;gap:6px;">
+          <button class="btn btn-sm btn-icon" onclick="openEditDrugType('${d.id}')" title="Edit"><i class="ti ti-edit"></i></button>
+          <button class="btn btn-sm btn-icon btn-danger" onclick="deleteDrugType('${d.id}')" title="Delete"><i class="ti ti-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" class="empty">No drug types yet.</td></tr>';
+}
+
+function renderLicensesGov() {
+  document.getElementById('tbl-licenses-gov').innerHTML = state.licenses.map(l => `
+    <tr>
+      <td><span class="uuid-mono">${l.id}</span></td>
+      <td>${getDrugType(l.drugTypeId).name}</td>
+      <td>${getParticipant(l.manufacturerId).name}</td>
+      <td><span class="badge badge-${l.status}">${l.status}</span></td>
+      <td style="font-size:13px;font-feature-settings:'tnum';">${l.expiresAt}</td>
+      <td style="text-align:right;">
+        <div style="display:inline-flex;gap:6px;">
+        ${l.status === 'valid' ? `<button class="btn btn-sm" onclick="openProlong('${l.id}')">Prolong</button><button class="btn btn-sm btn-danger" onclick="doRevokeLicense('${l.id}')">Revoke</button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderParticipants() {
+  document.getElementById('tbl-participants').innerHTML = state.participants.map(p => `
+    <tr>
+      <td><strong>${p.name}</strong></td>
+      <td><span class="badge badge-${p.role === 'Manufacturer' ? 'mfr' : 'pha'}">${p.role}</span></td>
+      <td><span class="uuid-mono">${p.id}</span></td>
+      <td style="color:var(--text-tertiary);font-size:13px;font-feature-settings:'tnum';">${p.createdAt}</td>
+    </tr>
+  `).join('');
+}
+
+function renderAudit() {
+  document.getElementById('tbl-audit').innerHTML = state.auditLog.map(a => `
+    <tr>
+      <td style="font-size:12.5px;color:var(--text-tertiary);white-space:nowrap;font-family:var(--font-mono);font-feature-settings:'tnum';">${a.ts}</td>
+      <td>${a.event}</td>
+      <td style="font-size:13px;color:var(--text-secondary);">${a.actor}</td>
+    </tr>
+  `).join('');
+}
+
+function renderMfrDashboard() {
+  const myLicenses = state.licenses.filter(l => l.manufacturerId === 'p-1' && l.status === 'valid');
+  const myUnits = state.units.filter(u => u.manufacturerId === 'p-1');
+  document.getElementById('kpi-mfr-lic').textContent = myLicenses.length;
+  document.getElementById('kpi-mfr-units').textContent = myUnits.length;
+}
+
+function renderMfrLicenses() {
+  const myLics = state.licenses.filter(l => l.manufacturerId === 'p-1');
+  document.getElementById('tbl-mfr-licenses').innerHTML = myLics.map(l => `
+    <tr>
+      <td>${getDrugType(l.drugTypeId).name}</td>
+      <td><span class="badge badge-${l.status}">${l.status}</span></td>
+      <td style="font-size:13px;font-feature-settings:'tnum';">${l.expiresAt}</td>
+      <td>${l.status === 'valid' ? '<span style="color:var(--text-tertiary);font-size:13px;">—</span>' : '<span style="color:var(--text-tertiary);font-size:13px;">—</span>'}</td>
+    </tr>
+  `).join('');
+}
+
+function renderMfrCreate() {
+  const sel = document.getElementById('create-drug-select');
+  const tdy = today();
+  const validDrugs = state.licenses
+    .filter(l => l.manufacturerId === 'p-1' && l.status === 'valid' && l.expiresAt >= tdy)
+    .map(l => l.drugTypeId);
+  const unique = [...new Set(validDrugs)];
+  sel.innerHTML = unique.length
+    ? unique.map(did => `<option value="${did}">${getDrugType(did).name}</option>`).join('')
+    : '<option value="" disabled>No valid licenses</option>';
+  document.getElementById('create-uuid-preview').value = generateUUID();
+}
+
+function renderMfrUnits() {
+  const myUnits = state.units.filter(u => u.manufacturerId === 'p-1' && u.currentOwner === 'p-1');
+  document.getElementById('tbl-mfr-units').innerHTML = myUnits.length ? myUnits.map(u => `
+    <tr>
+      <td><span class="uuid-mono">${shortId(u.id)}</span></td>
+      <td>${getDrugType(u.drugTypeId).name}</td>
+      <td style="font-size:13px;font-feature-settings:'tnum';">${u.expirationDate}</td>
+      <td><span class="badge badge-${u.status}">${u.status}</span></td>
+      <td style="text-align:right;"><button class="btn btn-sm" onclick="openTransferUnit('${u.id}')"><i class="ti ti-transfer"></i> Transfer</button></td>
+    </tr>
+  `).join('') : '<tr><td colspan="5" class="empty">No units owned by you.</td></tr>';
+}
+
+function renderPhaDashboard() {
+  const owned = state.units.filter(u => u.currentOwner === 'p-2' && u.status === 'active');
+  const sold = state.units.filter(u => u.status === 'sold');
+  document.getElementById('kpi-pha-units').textContent = owned.length;
+  document.getElementById('kpi-pha-sold').textContent = sold.length;
+}
+
+function renderPhaUnits() {
+  const owned = state.units.filter(u => u.currentOwner === 'p-2');
+  document.getElementById('tbl-pha-units').innerHTML = owned.length ? owned.map(u => `
+    <tr>
+      <td><span class="uuid-mono">${shortId(u.id)}</span></td>
+      <td>${getDrugType(u.drugTypeId).name}</td>
+      <td style="font-size:13px;font-feature-settings:'tnum';">${u.expirationDate}</td>
+      <td><span class="badge badge-${u.status}">${u.status}</span></td>
+      <td style="text-align:right;">${u.status === 'active' ? `<button class="btn btn-sm btn-primary" onclick="openTransferCitizen('${u.id}')"><i class="ti ti-pill"></i> Dispense</button>` : '—'}</td>
+    </tr>
+  `).join('') : '<tr><td colspan="5" class="empty">No units received yet.</td></tr>';
+}
+
+// =====================================================
+// MODAL HELPERS
+// =====================================================
+function showModal(id) {
+  if (id === 'modal-issue-license') {
+    document.getElementById('lic-drug').innerHTML = state.drugTypes.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+    document.getElementById('lic-mfr').innerHTML = state.participants.filter(p => p.role === 'Manufacturer').map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  }
+  if (id === 'modal-transfer-pha') {
+    const myUnits = state.units.filter(u => u.currentOwner === 'p-1');
+    document.getElementById('xfer-unit').innerHTML = myUnits.map(u => `<option value="${u.id}">${shortId(u.id)} — ${getDrugType(u.drugTypeId).name}</option>`).join('') || '<option disabled>No units owned</option>';
+    document.getElementById('xfer-pha').innerHTML = state.participants.filter(p => p.role === 'Pharmacy').map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  }
+  if (id === 'modal-create-unit') {
+    const tdy = today();
+    const validDrugs = state.licenses
+      .filter(l => l.manufacturerId === 'p-1' && l.status === 'valid' && l.expiresAt >= tdy)
+      .map(l => l.drugTypeId);
+    const unique = [...new Set(validDrugs)];
+    document.getElementById('modal-drug-select').innerHTML = unique.length
+      ? unique.map(did => `<option value="${did}">${getDrugType(did).name}</option>`).join('')
+      : '<option value="" disabled>No valid licenses</option>';
+  }
+  if (id === 'modal-transfer-citizen') {
+    const phaunits = state.units.filter(u => u.currentOwner === 'p-2' && u.status === 'active');
+    document.getElementById('cit-unit').innerHTML = phaunits.map(u => `<option value="${u.id}">${shortId(u.id)} — ${getDrugType(u.drugTypeId).name}</option>`).join('') || '<option disabled>No units in stock</option>';
+  }
+  document.getElementById(id).style.display = 'flex';
+}
+
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.style.display = 'none';
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+  }
+});
+
+// =====================================================
+// ACTIONS
+// =====================================================
+function doAddDrugType() {
+  const name = document.getElementById('dt-name').value.trim();
+  const code = document.getElementById('dt-code').value.trim();
+  const desc = document.getElementById('dt-desc').value.trim();
+  if (!name || !code) { toast('Name and code are required.', true); return; }
+  const id = 'dt-' + Date.now();
+  state.drugTypes.push({ id, name, code, description: desc, createdAt: today(), createdBy: 'Gov Admin' });
+  addAudit(`Drug type "${name}" registered`, 'Gov Admin');
+  closeModal('modal-add-drugtype');
+  document.getElementById('dt-name').value = '';
+  document.getElementById('dt-code').value = '';
+  document.getElementById('dt-desc').value = '';
+  toast('Drug type registered.');
+  renderPage(activePage);
+}
+
+function deleteDrugType(id) {
+  const dt = state.drugTypes.find(d => d.id === id);
+  if (!dt) return;
+  // Block deletion if any license or unit references it
+  const usedByLic = state.licenses.some(l => l.drugTypeId === id);
+  const usedByUnit = state.units.some(u => u.drugTypeId === id);
+  if (usedByLic || usedByUnit) {
+    toast(`Cannot delete — ${dt.name} is referenced by existing licenses/units.`, true);
+    return;
+  }
+  state.drugTypes = state.drugTypes.filter(d => d.id !== id);
+  addAudit(`Drug type "${dt.name}" deleted`, 'Gov Admin');
+  toast('Drug type deleted.');
+  renderDrugTypes();
+}
+
+function openEditDrugType(id) {
+  const dt = state.drugTypes.find(d => d.id === id);
+  if (!dt) return;
+  document.getElementById('edt-id').value = dt.id;
+  document.getElementById('edt-name').value = dt.name;
+  document.getElementById('edt-code').value = dt.code;
+  document.getElementById('edt-desc').value = dt.description || '';
+  showModal('modal-edit-drugtype');
+}
+
+function doEditDrugType() {
+  const id = document.getElementById('edt-id').value;
+  const name = document.getElementById('edt-name').value.trim();
+  const desc = document.getElementById('edt-desc').value.trim();
+  if (!name) { toast('Name cannot be empty.', true); return; }
+  const dt = state.drugTypes.find(d => d.id === id);
+  if (!dt) return;
+  const oldName = dt.name;
+  dt.name = name;
+  dt.description = desc;
+  addAudit(`Drug type "${oldName}" updated${oldName !== name ? ` → "${name}"` : ''}`, 'Gov Admin');
+  closeModal('modal-edit-drugtype');
+  toast('Drug type updated.');
+  renderPage(activePage);
+}
+
+function doIssueLicense() {
+  const drugTypeId = document.getElementById('lic-drug').value;
+  const manufacturerId = document.getElementById('lic-mfr').value;
+  const expiresAt = document.getElementById('lic-exp').value;
+  if (!expiresAt) { toast('Please set an expiry date.', true); return; }
+  if (expiresAt <= today()) { toast('Expiry date must be in the future.', true); return; }
+  const id = 'L-00' + (state.licenses.length + 1);
+  state.licenses.push({ id, drugTypeId, manufacturerId, status: 'valid', issuedAt: today(), expiresAt, issuedBy: 'Gov Admin' });
+  addAudit(`License ${id} issued (${getDrugType(drugTypeId).name})`, 'Gov Admin');
+  closeModal('modal-issue-license');
+  toast('License issued.');
+  renderPage(activePage);
+}
+
+function doRevokeLicense(id) {
+  const lic = state.licenses.find(l => l.id === id);
+  if (lic) { lic.status = 'revoked'; addAudit(`License ${id} revoked`, 'Gov Admin'); }
+  toast('License revoked.');
+  renderPage(activePage);
+}
+
+function openProlong(id) {
+  document.getElementById('prolong-lic-id').value = id;
+  showModal('modal-prolong');
+}
+
+function doProlongLicense() {
+  const id = document.getElementById('prolong-lic-id').value;
+  const newDate = document.getElementById('prolong-date').value;
+  if (!newDate) { toast('Please choose a date.', true); return; }
+  const lic = state.licenses.find(l => l.id === id);
+  if (!lic) { toast('License not found.', true); return; }
+  if (lic.status !== 'valid') { toast('Only valid licenses can be prolonged.', true); return; }
+  if (newDate <= lic.expiresAt) { toast(`New date must be later than current expiry (${lic.expiresAt}).`, true); return; }
+  lic.expiresAt = newDate;
+  addAudit(`License ${id} prolonged to ${newDate}`, 'Gov Admin');
+  closeModal('modal-prolong');
+  toast('License prolonged.');
+  renderPage(activePage);
+}
+
+function doRegisterOrg() {
+  const name = document.getElementById('org-name').value.trim();
+  const role = document.getElementById('org-role').value;
+  if (!name) { toast('Organization name required.', true); return; }
+  state.participants.push({ id: 'p-' + Date.now(), name, role, createdAt: today() });
+  addAudit(`${role} "${name}" registered`, 'Gov Admin');
+  closeModal('modal-register-org');
+  document.getElementById('org-name').value = '';
+  toast('Participant registered.');
+  renderPage(activePage);
+}
+
+// Returns the valid (non-revoked, non-expired) license for this manufacturer/drug, or null
+function findValidLicense(drugTypeId, manufacturerId) {
+  const tdy = today();
+  return state.licenses.find(l =>
+    l.drugTypeId === drugTypeId &&
+    l.manufacturerId === manufacturerId &&
+    l.status === 'valid' &&
+    l.expiresAt >= tdy
+  ) || null;
+}
+
+function doCreateUnit() {
+  const drugTypeId = document.getElementById('create-drug-select').value;
+  const exp = document.getElementById('create-exp-date').value;
+  if (!drugTypeId) { toast('No valid license available — cannot create unit.', true); return; }
+  if (!exp) { toast('Expiration date required.', true); return; }
+  if (exp <= today()) { toast('Expiration date must be in the future.', true); return; }
+  const lic = findValidLicense(drugTypeId, 'p-1');
+  if (!lic) { toast('No valid, non-expired license for this drug type.', true); return; }
+
+  // Generate a UUID and check uniqueness (MFR-2)
+  let uuid;
+  let attempts = 0;
+  do {
+    uuid = generateUUID();
+    attempts++;
+  } while (state.units.find(u => u.id === uuid) && attempts < 5);
+  if (state.units.find(u => u.id === uuid)) { toast('UUID collision — please retry.', true); return; }
+
+  state.units.push({
+    id: uuid, drugTypeId, manufacturerId: 'p-1', licenseId: lic.id,
+    currentOwner: 'p-1', status: 'active', expirationDate: exp, createdAt: today(),
+    transferHistory: [{ from: 'System', to: 'PharmaCorp', timestamp: new Date().toISOString() }]
+  });
+  addAudit(`Unit ${shortId(uuid)} created (${getDrugType(drugTypeId).name}) under ${lic.id}`, 'PharmaCorp');
+  document.getElementById('create-uuid-preview').value = generateUUID();
+  toast('Unit created successfully.');
+  renderPage(activePage);
+}
+
+function doCreateUnitModal() {
+  const drugTypeId = document.getElementById('modal-drug-select').value;
+  const exp = document.getElementById('modal-exp-date').value;
+  if (!drugTypeId) { toast('No valid license available — cannot create unit.', true); return; }
+  if (!exp) { toast('Expiration date required.', true); return; }
+  if (exp <= today()) { toast('Expiration date must be in the future.', true); return; }
+  const lic = findValidLicense(drugTypeId, 'p-1');
+  if (!lic) { toast('No valid, non-expired license for this drug type.', true); return; }
+
+  let uuid;
+  let attempts = 0;
+  do {
+    uuid = generateUUID();
+    attempts++;
+  } while (state.units.find(u => u.id === uuid) && attempts < 5);
+  if (state.units.find(u => u.id === uuid)) { toast('UUID collision — please retry.', true); return; }
+
+  state.units.push({
+    id: uuid, drugTypeId, manufacturerId: 'p-1', licenseId: lic.id,
+    currentOwner: 'p-1', status: 'active', expirationDate: exp, createdAt: today(),
+    transferHistory: [{ from: 'System', to: 'PharmaCorp', timestamp: new Date().toISOString() }]
+  });
+  addAudit(`Unit ${shortId(uuid)} created (${getDrugType(drugTypeId).name}) under ${lic.id}`, 'PharmaCorp');
+  closeModal('modal-create-unit');
+  toast('Unit created.');
+  renderPage(activePage);
+}
+
+function openTransferUnit(unitId) {
+  document.getElementById('xfer-unit').innerHTML = `<option value="${unitId}">${shortId(unitId)}</option>`;
+  document.getElementById('xfer-pha').innerHTML = state.participants.filter(p => p.role === 'Pharmacy').map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  showModal('modal-transfer-pha');
+}
+
+function doTransferPharmacy() {
+  const unitId = document.getElementById('xfer-unit').value;
+  const phaId = document.getElementById('xfer-pha').value;
+  const unit = state.units.find(u => u.id === unitId);
+  if (!unit) { toast('Unit not found.', true); return; }
+  // SYS-2: only current owner may transfer
+  if (unit.currentOwner !== 'p-1') { toast('You are not the current owner of this unit.', true); return; }
+  // BL 2.6: unit must be active and not expired
+  if (unit.status !== 'active') { toast(`Cannot transfer a ${unit.status} unit.`, true); return; }
+  if (unit.expirationDate < today()) { toast('Cannot transfer an expired unit.', true); return; }
+  const pha = getParticipant(phaId);
+  if (!pha || pha.role !== 'Pharmacy') { toast('Recipient must be a registered pharmacy.', true); return; }
+
+  unit.transferHistory.push({ from: getParticipant(unit.currentOwner).name, to: pha.name, timestamp: new Date().toISOString() });
+  unit.currentOwner = phaId;
+  addAudit(`Unit ${shortId(unitId)} transferred to ${pha.name}`, 'PharmaCorp');
+  closeModal('modal-transfer-pha');
+  toast('Unit transferred to pharmacy.');
+  renderPage(activePage);
+}
+
+function openTransferCitizen(unitId) {
+  document.getElementById('cit-unit').innerHTML = `<option value="${unitId}">${shortId(unitId)}</option>`;
+  showModal('modal-transfer-citizen');
+}
+
+function doTransferCitizen() {
+  const unitId = document.getElementById('cit-unit').value;
+  const citizenId = document.getElementById('cit-id').value.trim();
+  if (!citizenId) { toast('Citizen ID / name is required.', true); return; }
+  const unit = state.units.find(u => u.id === unitId);
+  if (!unit) { toast('Unit not found.', true); return; }
+  // PH-2: only current owner pharmacy may dispense
+  if (unit.currentOwner !== 'p-2') { toast('You do not own this unit.', true); return; }
+  if (unit.status !== 'active') { toast(`Cannot dispense a ${unit.status} unit.`, true); return; }
+  if (unit.expirationDate < today()) { toast('Cannot dispense an expired unit.', true); return; }
+
+  unit.transferHistory.push({ from: 'City Pharmacy', to: citizenId, timestamp: new Date().toISOString() });
+  unit.currentOwner = citizenId;
+  unit.status = 'sold';
+  addAudit(`Unit ${shortId(unitId)} dispensed to ${citizenId}`, 'City Pharmacy');
+  closeModal('modal-transfer-citizen');
+  document.getElementById('cit-id').value = '';
+  toast('Unit dispensed to citizen.');
+  renderPage(activePage);
+}
+
+function doVerify() {
+  const input = document.getElementById('verify-input').value.trim();
+  const area = document.getElementById('verify-result-area');
+  const unit = state.units.find(u => u.id.toLowerCase() === input.toLowerCase());
+  if (!unit) {
+    area.innerHTML = `
+      <div class="not-found">
+        <i class="ti ti-search-off"></i>
+        <div class="not-found-text">
+          <strong>No unit found</strong>
+          We couldn't match this UUID against the ledger. Double-check the code on the package and try again.
+        </div>
+      </div>`;
+    return;
+  }
+  const dt = getDrugType(unit.drugTypeId);
+  const owner = unit.currentOwner.startsWith('p-') ? getParticipant(unit.currentOwner).name : unit.currentOwner;
+  area.innerHTML = `
+    <div class="verify-result">
+      <div class="verify-result-header">
+        <span class="check"><i class="ti ti-shield-check-filled"></i></span>
+        <div>
+          <div class="title">Verified — ${dt.name}</div>
+          <div class="uuid">${unit.id}</div>
+        </div>
+      </div>
+      <div class="verify-result-body">
+        <div class="info-grid">
+          <div class="info-item"><div class="label">Drug type</div><div class="val">${dt.name}</div></div>
+          <div class="info-item"><div class="label">Status</div><div class="val"><span class="badge badge-${unit.status}">${unit.status}</span></div></div>
+          <div class="info-item"><div class="label">Current owner</div><div class="val">${owner}</div></div>
+          <div class="info-item"><div class="label">Expiration</div><div class="val" style="font-feature-settings:'tnum';">${unit.expirationDate}</div></div>
+        </div>
+        <div class="history-title">Chain of custody</div>
+        ${unit.transferHistory.map((h, i) => `
+          <div class="history-item">
+            <span class="idx">${String(i+1).padStart(2,'0')}</span>
+            <span>${h.from}</span>
+            <span class="arrow"><i class="ti ti-arrow-narrow-right"></i></span>
+            <span class="target">${h.to}</span>
+            <span class="ts">${h.timestamp.substring(0,10)}</span>
+          </div>
+        `).join('')}
+        <div style="margin-top:16px;">
+          <button class="btn btn-sm" onclick="document.getElementById('verify-input').value='';document.getElementById('verify-result-area').innerHTML='';"><i class="ti ti-arrow-back-up"></i> Verify another</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function prefillVerify() {
+  document.getElementById('verify-input').value = '550e8400-e29b-41d4-a716-446655440000';
+}
+
+// =====================================================
+// UTIL
+// =====================================================
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
+function today() { return new Date().toISOString().substring(0, 10); }
+
+function addAudit(event, actor) {
+  const ts = new Date().toISOString().substring(0, 16).replace('T', ' ');
+  state.auditLog.unshift({ ts, event, actor });
+}
+
+function toast(msg, isError) {
+  const el = document.getElementById('toast');
+  el.querySelector('i').className = isError ? 'ti ti-alert-circle-filled' : 'ti ti-circle-check-filled';
+  el.classList.toggle('error', !!isError);
+  document.getElementById('toast-msg').textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+renderSidebar();
+renderGovDashboard();
+</script>
+</body>
+</html>
